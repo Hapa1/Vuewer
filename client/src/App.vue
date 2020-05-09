@@ -6,61 +6,27 @@
       dark
     >
       
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+    <div class="d-flex align-center">
+      <v-icon class="display-1 mr-2">{{'mdi-folder-open'}}</v-icon>
+      <span><h1>Vuewer</h1></span>
+    </div>
     </v-app-bar>
 
     <v-content >
-      <v-card class="d-flex">
+      <v-card height="100%" class="d-flex">
         <FileContainer/>
-        <HelloWorld/>
       </v-card>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import FileContainer from './components/FileContainer';
 
 export default {
   name: 'App',
-
   components: {
-    FileContainer,
-    HelloWorld
-  },
-
-  data: () => ({
-    //
-  }),
+    FileContainer
+  }
 };
 </script>
