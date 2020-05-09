@@ -1,9 +1,8 @@
 <template>
-  <v-container fill-height fluid>
+  <div fill-height fluid class="canvas" >
       
       <v-row
-            align="center"
-            justify="center"
+        
       >
       <div v-if="!path">
         <v-card>
@@ -17,6 +16,7 @@
           </div>
         </v-card>
       </div>
+      
       
       
       <div v-if="path && page && pages">
@@ -67,7 +67,7 @@
         </div>
 
       </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -97,11 +97,11 @@ import pdf from 'pdfjs-dist'
     },
     methods: {
       resetData(){
+        this.$parent.setCanvas(null,null)
         this.name = null;
         this.page = null;
         this.pages = null;
-        this.pdfData = null;
-        this.path = null;
+        this.pdfData = null
       },
       incrementPage(){
         this.page++
@@ -133,7 +133,7 @@ import pdf from 'pdfjs-dist'
         var page = await this.pdfData.getPage(pageNum)
         console.log('Page loaded');
 
-        var scale = 1;
+        var scale = .9;
         var viewport = page.getViewport({scale: scale});
 
         // Prepare canvas using PDF page dimensions
@@ -156,3 +156,9 @@ import pdf from 'pdfjs-dist'
     }
   }
 </script>
+<style>
+.canvas {
+  position:fixed;
+  left: 50%;
+}
+</style>

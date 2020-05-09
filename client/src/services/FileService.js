@@ -18,6 +18,7 @@ const FileService = {
                 baseURL: `http://localhost:3000`,
             }   
         )
+        console.log(res.data)
         return res.data
     }
 
