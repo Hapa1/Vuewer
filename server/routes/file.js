@@ -23,7 +23,7 @@ router.get('/', async (req,res) => {
     const readFile = promisify(fs.readdir) //convert callback function to promise based using Node's promisify
     const readStat = promisify(fs.stat)
 
-    var dir = 'C:/Users/Steve/Desktop/Code/Vuewer/server/static/'
+    var dir = '/'
 
     var diretoryTreeToObj = function(dir, done) {
         var results = [];
