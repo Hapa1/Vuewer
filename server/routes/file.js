@@ -1,8 +1,8 @@
 var express = require('express')
 var router = express.Router()
 var fs = require('fs');
-const fileHelper = require('../helpers/fileHelper.js')
-const config = require('../config/config.js')
+const { sortFileArray, directoryToObj } = require('../helpers/fileHelper.js')
+const { ROOT } = require('../config/config.js')
 
 router.get('/fileName', (req,res) => {
     fs.readFile(req.query.path, (err,data) => {
@@ -17,14 +17,14 @@ router.get('/fileName', (req,res) => {
 
 router.get('/', async (req,res) => {
 
-    var dir = config.ROOT
+    var dir = ROOT
 
-    fileHelper.directoryToObj(dir, function(err, data){
+    directoryToObj(dir, function(err, data){
         if(err) {
             res.status(500).send("Error: path " + err.path + " not found")
         }
         else {
-            res.send(fileHelper.sortDirectoryObj(data))
+            res.send(sortFileArray(data))
         }
     });
 
