@@ -2,8 +2,12 @@
     <v-row>
         
         <v-col md="4">
-            <div v-if="!items" class="text-center">
-                Waiting for files...
+            <div v-if="!items" class="mt-6 text-center">
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                ></v-progress-circular>
+                
             </div>
             <div v-if="items==[]" class="text-center">
                 No files found! 
@@ -29,7 +33,7 @@
             </div>
         </v-col>
         <v-divider vertical></v-divider>
-        <v-col class="pa-0">
+        <v-col class="pa-0 d-flex mb-3 justify-center">
             <Canvas 
                 v-bind:path="path"
                 v-bind:docName="docName"  
@@ -55,34 +59,14 @@ export default {
             }
         },
     async mounted() {
-        this.items = this.sortDirectoryObj(await FileService.index())
-        console.log(this.items)
+        this.items = (await FileService.index())
     },
-
     
     methods: {
         setCanvas(path,docName) {
             this.path = path;
             this.docName = docName;
         },
-        sortDirectoryObj(dirObj) {
-            const x = dirObj.sort( (a,b) => {
-
-                var aVal = (a.type == 'file' ? 0 : 1)
-                var bVal = (b.type == 'file' ? 0 : 1)
-                
-                if (aVal < bVal){
-                    return 1
-                } 
-                if (aVal > bVal){
-                    return -1
-                } 
-
-                return 0
-            })
-            return x
-        }
-
     }
 }
 </script>

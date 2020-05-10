@@ -1,10 +1,8 @@
 <template>
   <div fill-height fluid class="canvas" >
       
-      <v-row
-        
-      >
-      <div v-if="!path">
+
+      <div v-if="!path" class="mt-10">
         <v-card>
           <v-card-title>
             Click on a PDF file to get started!
@@ -16,20 +14,26 @@
           </div>
         </v-card>
       </div>
+
+      <v-col v-if="path && page && pages" class="pa-0 d-flex justify-space-between">
+            <v-col>
+            <div class='d-flex align-center'>
+              <h3>{{docName}}</h3>
+            </div>
+            </v-col>
+            <v-col md="auto" class="pa-0 mt-2">
+            <div class='d-flex align-center'>
+              <v-btn @click="resetData" fab small text>
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </div>
+            </v-col>
+      </v-col>
       
       
       
       <div v-if="path && page && pages">
-          <div class="d-flex justify-space-between">
-
-            <div class='d-flex align-center'>
-              <v-icon>
-                {{'mdi-file-pdf'}}
-              </v-icon>
-              <h3>{{docName}}</h3>
-            </div>
-
-            <div class="d-flex my-5 justify-center">
+            <div class="d-flex mb-3 justify-center">
               <v-btn v-if="page==1 || !page" class="mx-2" fab small color="disabled">
                 <v-icon dark>mdi-chevron-left</v-icon>
               </v-btn>
@@ -49,24 +53,11 @@
               <v-btn v-else @click="incrementPage" class="mx-2" fab dark small color="primary">
                 <v-icon dark>mdi-chevron-right</v-icon>
               </v-btn>
-
             </div>
-            <div class='d-flex align-center'>
-              <v-btn @click="resetData" fab small text>
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </div>
-            
+          <div class="d-flex mb-3 justify-center">
+              <canvas class="boxShadow" id="the-canvas"></canvas>
           </div>
-        
-          <v-list-item one-line>
-            <v-card :elevation="10" class="pa-1">
-              <canvas id="the-canvas"></canvas>
-            </v-card>
-          </v-list-item>
         </div>
-
-      </v-row>
   </div>
 </template>
 
@@ -80,9 +71,11 @@ import pdf from 'pdfjs-dist'
     watch: {
       path: async function() {
         if(this.path){
-          this.pdfData = await this.getPDFData(this.path)
+          var url = await this.getUrl(this.path)
+          this.pdfData = await this.getPdf(url)
           this.pages = this.pdfData.numPages
           this.page = 1;
+          this.downloadPdf(url)
           this.renderPage(this.page)
         }
       }
@@ -96,22 +89,25 @@ import pdf from 'pdfjs-dist'
       }
     },
     methods: {
-      resetData(){
+      resetData(){ //clear canvas data when user hits close
         this.$parent.setCanvas(null,null)
         this.name = null;
         this.page = null;
         this.pages = null;
         this.pdfData = null
       },
-      incrementPage(){
+
+      incrementPage(){ //increment page state by 1
         this.page++
         this.renderPage(this.page)
       },
-      decrementPage(){
+
+      decrementPage(){ //decrement page state by 1
         this.page--
         this.renderPage(this.page)
       },
-      async getPDFData(path) {
+
+      async getUrl(path){ //return the url string of a pdf blob
         const response = (await FileService.getFile(path)).data
         const file = new Blob(
             [response],
@@ -119,19 +115,25 @@ import pdf from 'pdfjs-dist'
         )
         
         const fileURL = URL.createObjectURL(file);
+        return fileURL
+      },
 
-        var link = document.createElement("a"); // Or maybe get it from the current document
-        link.href = fileURL;
-        link.download = this.docName
-        link.click();
-
+      async getPdf(fileURL) { //return the document data given
         var doc = await pdf.getDocument(fileURL)
         return doc
       },
 
-      async renderPage(pageNum) {
+      downloadPdf(fileUrl){ //download pdf given a url
+        var link = document.createElement("a");
+        link.href = fileUrl;
+        link.download = this.docName;
+        link.click();
+        console.log(fileUrl)
+      },
+      
+
+      async renderPage(pageNum) { 
         var page = await this.pdfData.getPage(pageNum)
-        console.log('Page loaded');
 
         var scale = .9;
         var viewport = page.getViewport({scale: scale});
@@ -150,15 +152,19 @@ import pdf from 'pdfjs-dist'
         
         var renderTask = page.render(renderContext);
         renderTask.promise.then(function () {
-            console.log('Page rendered');
         });
       }
     }
   }
 </script>
 <style>
+.maxWidth{
+  max-width: 25%;
+}
+.boxShadow {
+  box-shadow: 10px 10px 25px -2px rgba(0,0,0,0.34);
+}
 .canvas {
   position:fixed;
-  left: 50%;
 }
 </style>

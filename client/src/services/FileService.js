@@ -1,24 +1,23 @@
 import Axios from 'axios';
+import config from '../../config/config'
 
 const FileService = {
 
     async getFile (path) {
-        console.log(path)
         return Axios.get('file/fileName', {
             params: {
                 path
             },
-            baseURL: `http://localhost:3000`,
+            baseURL: config.apiEndpoint,
             responseType: 'blob'
         })
     },
     async index () {
         const res = await Axios.get('file', 
             {
-                baseURL: `http://localhost:3000`,
+                baseURL: config.apiEndpoint,
             }   
         )
-        console.log(res.data)
         return res.data
     }
 

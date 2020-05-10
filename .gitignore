@@ -1,2 +1,4 @@
 server/node_modules
+server/config/config.js
 client/node_modules
+client/config/config.js
