@@ -51,7 +51,7 @@ const directoryToObj = function(dir, done) { //convert a directory to a JS objec
         }
 
         var pending = list.length; 
-        console.log(pending)
+        
         if (!pending) { //return empty string if directory is empty
             return done(null, []); 
         }
@@ -67,7 +67,7 @@ const directoryToObj = function(dir, done) { //convert a directory to a JS objec
                             type: 'folder',
                             children: res
                         });
-                        if (pending === 1){ //
+                        if (pending === 1){ 
                             done(null,results);
                         } else {
                             --pending;
