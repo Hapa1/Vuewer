@@ -59,11 +59,12 @@ export default {
             }
         },
     async mounted() {
-        this.items = (await FileService.index())
+        console.log(process.env)
+        this.items = (await FileService.index()) //load the entire tree and set state
     },
     
     methods: {
-        setCanvas(path,docName) {
+        setCanvas(path,docName) { //set the state of the current pdf canvas
             this.path = path;
             this.docName = docName;
         },

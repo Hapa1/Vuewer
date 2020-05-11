@@ -128,7 +128,6 @@ import pdf from 'pdfjs-dist'
         link.href = fileUrl;
         link.download = this.docName;
         link.click();
-        console.log(fileUrl)
       },
       
 
