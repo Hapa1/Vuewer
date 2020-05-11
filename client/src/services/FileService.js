@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import config from '../../config/dev'
+import config from '../../config/config'
 
 const FileService = {
 
